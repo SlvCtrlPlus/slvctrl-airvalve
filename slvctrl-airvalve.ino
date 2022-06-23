@@ -10,6 +10,7 @@ const int ANGLE_OPEN = 10;
 const int ANGLE_CLOSED = 85;
 
 Servo servo;
+int currentFlow = 0;
 
 char serial_command_buffer[32];
 SerialCommands serialCommands(&Serial, serial_command_buffer, sizeof(serial_command_buffer), "\n", " ");
@@ -28,6 +29,7 @@ void setup() {
     // Add commands
     serialCommands.SetDefaultHandler(commandUnrecognized);
     serialCommands.AddCommand(new SerialCommand("introduce", commandIntroduce));
+    serialCommands.AddCommand(new SerialCommand("status", commandStatus));
     serialCommands.AddCommand(new SerialCommand("stress", commandStress));
     serialCommands.AddCommand(new SerialCommand("flow-get", commandFlowGet));
     serialCommands.AddCommand(new SerialCommand("flow-set", commandFlowSet));
@@ -65,6 +67,10 @@ void commandFlowSet(SerialCommands* sender) {
     setFlow(percentage, fade);
 
     serial_printf(sender->GetSerial(), "flow-set,%d\n", getFlow());
+}
+
+void commandStatus(SerialCommands* sender) {
+    serial_printf(sender->GetSerial(), "status,flow:%d\n", currentFlow);
 }
 
 void commandFlowGet(SerialCommands* sender) {
@@ -134,6 +140,8 @@ void setFlow(int percentage, int fade) {
         servo.write(newAngle);
         currentAngle = newAngle;
     }
+
+    currentFlow = percentage;
 }
 
 int getFlow() {
