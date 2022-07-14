@@ -23,6 +23,7 @@ void commandFlowSet(SerialCommands* sender);
 void setup() {
     servo.attach(SERVO_PWM_PIN);
     servo.write(ANGLE_OPEN); // set to open
+    currentFlow = 100;
     
     Serial.begin(9600);
 
