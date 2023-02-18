@@ -16,8 +16,9 @@ A minimum of three (3) are recommended for stability, but less can work out fine
 30%  with Grid, Triangles or Cubic is recommended.
 
 ### Supports
-The slvCtrl-airvalve was designed to be printed with minimal need for supports. 
-Refer to the picture for placement on the build plate. Only the ValveBox_Rear.stl requires a support under the USB-Port
+The slvctrl-airvalve was designed to be printed with minimal need for supports. The ValveBox_Front.stl requires 
+supports to bridge valve plate holder and the ValveBox_Rear.stl requires a support under the USB-Port. 
+Refer to the picture for placement on the build plate.
 
 ## BOM
 * 1x SG90 micro servo 9g
