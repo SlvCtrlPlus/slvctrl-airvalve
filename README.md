@@ -3,8 +3,7 @@
 ![Air Valve Visualization](./renders/visualization.png)
 
 ## Printing
-
-The files can be found in the `stl/` folder of this repository.
+The files can be found in the [stl/](./stl) folder of this repository.
 
 ### Material
 Good results were achieved using ABS and PETG. PLA was not tested, but may also work out fine. 
@@ -21,12 +20,11 @@ The slvCtrl-airvalve was designed to be printed with minimal need for supports.
 Refer to the picture for placement on the build plate. Only the ValveBox_Rear.stl requires a support under the USB-Port
 
 ## BOM
-
-* 1x SG90 Microservo 9g
+* 1x SG90 micro servo 9g
 * 1x Adafruit Trinket M0
-* 20x M2x8 Selftapping screws
+* 20x M2x8 self-tapping screws
 
-Construction
+## Construction
 Combine the components adding screws where necessary. Consult the image for reference.
 The servo cable will have to be cut and shortened, then fed through the hole in the ValveBox_RearTrinketMount.stl 
 and then soldered to the trinket connections.
