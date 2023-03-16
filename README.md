@@ -2,6 +2,13 @@
 
 ![Air Valve Visualization](./renders/visualization.png)
 
+## Schema
+![Schema](./renders/schema.png)
+
+## Required libraries
+* https://github.com/ppedro74/Arduino-SerialCommands
+* https://github.com/arduino-libraries/Servo
+
 ## Printing
 The files can be found in the [stl/](./stl) folder of this repository.
 
