@@ -4,6 +4,7 @@
 
 const char* DEVICE_TYPE = "air_valve";
 const int FM_VERSION = 10000; // 1.00.00
+const int PROTOCOL_VERSION = 10000; // 1.00.00
 
 const int SERVO_PWM_PIN = 1;
 const int ANGLE_OPEN = 10;
@@ -31,9 +32,10 @@ void setup() {
     serialCommands.SetDefaultHandler(commandUnrecognized);
     serialCommands.AddCommand(new SerialCommand("introduce", commandIntroduce));
     serialCommands.AddCommand(new SerialCommand("status", commandStatus));
+    serialCommands.AddCommand(new SerialCommand("attributes", commandAttributes));
     serialCommands.AddCommand(new SerialCommand("stress", commandStress));
-    serialCommands.AddCommand(new SerialCommand("flow-get", commandFlowGet));
-    serialCommands.AddCommand(new SerialCommand("flow-set", commandFlowSet));
+    serialCommands.AddCommand(new SerialCommand("get-flow", commandGetFlow));
+    serialCommands.AddCommand(new SerialCommand("set-flow", commandSetFlow));
     serialCommands.AddCommand(new SerialCommand("angle-get", commandAngleGet));
     serialCommands.AddCommand(new SerialCommand("angle-set", commandAngleSet));
 
@@ -45,37 +47,34 @@ void loop() {
 }
 
 void commandIntroduce(SerialCommands* sender) {
-    serial_printf(sender->GetSerial(), "%s,%d\n", DEVICE_TYPE, FM_VERSION);
+    serial_printf(sender->GetSerial(), "introduce;%s,%d,%d\n", DEVICE_TYPE, FM_VERSION, PROTOCOL_VERSION);
 }
 
-void commandFlowSet(SerialCommands* sender) {
+void commandStatus(SerialCommands* sender) {
+    serial_printf(sender->GetSerial(), "status;flow:%d\n", currentFlow);
+}
+
+void commandAttributes(SerialCommands* sender) {
+    serial_printf(sender->GetSerial(), "attributes;flow:rw[0-100]\n");
+}
+
+void commandSetFlow(SerialCommands* sender) {
     char* percentageStr = sender->Next();
-    char* fadeStr = sender->Next();
 
     if (percentageStr == NULL) {
-        sender->GetSerial()->println("Percentage parameter missing\n");
-        return;
-    }
-  
-    if (fadeStr == NULL) {
-        sender->GetSerial()->println("Fade parameter missing\n");
+        sender->GetSerial()->println("set-flow;;status:failed,reason:percentage_param_missing\n");
         return;
     }
   
     int percentage = atoi(percentageStr);
-    int fade = atoi(fadeStr);
   
-    setFlow(percentage, fade);
+    setFlow(percentage, 0);
 
-    serial_printf(sender->GetSerial(), "flow-set,%d\n", getFlow());
+    serial_printf(sender->GetSerial(), "set-flow;%d;status:successful\n", getFlow());
 }
 
-void commandStatus(SerialCommands* sender) {
-    serial_printf(sender->GetSerial(), "status,flow:%d\n", currentFlow);
-}
-
-void commandFlowGet(SerialCommands* sender) {
-    serial_printf(sender->GetSerial(), "flow-get,%d\n", getFlow());
+void commandGetFlow(SerialCommands* sender) {
+    serial_printf(sender->GetSerial(), "get-flow;%d\n", getFlow());
 }
 
 void commandAngleGet(SerialCommands* sender) {
